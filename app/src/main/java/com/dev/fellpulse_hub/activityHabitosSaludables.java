@@ -1,6 +1,7 @@
 package com.dev.fellpulse_hub;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -11,6 +12,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class activityHabitosSaludables extends AppCompatActivity {
 
@@ -19,10 +27,18 @@ public class activityHabitosSaludables extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private FrameLayout btnHeart;
 
+    // Firebase
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_habitos_saludables);
+
+        // Inicializar Firebase
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         etHabito = findViewById(R.id.etHabito);
         btnEnviarHabito = findViewById(R.id.btnEnviarHabito);
@@ -32,8 +48,7 @@ public class activityHabitosSaludables extends AppCompatActivity {
         btnEnviarHabito.setOnClickListener(v -> {
             String habito = etHabito.getText().toString().trim();
             if (!habito.isEmpty()) {
-                Toast.makeText(this, "¡Gracias por compartir tu hábito!", Toast.LENGTH_SHORT).show();
-                etHabito.setText("");
+                guardarHabito(habito);
             } else {
                 Toast.makeText(this, "Por favor, escribe un hábito", Toast.LENGTH_SHORT).show();
             }
@@ -43,6 +58,40 @@ public class activityHabitosSaludables extends AppCompatActivity {
 
         Animation heartBeatAnimation = AnimationUtils.loadAnimation(this, R.anim.heart_beat);
         btnHeart.startAnimation(heartBeatAnimation);
+    }
+
+    private void guardarHabito(String textoHabito) {
+        btnEnviarHabito.setEnabled(false); // Evitar doble click
+
+        // Obtener UID
+        FirebaseUser user = mAuth.getCurrentUser();
+        String uid;
+        if (user != null) {
+            uid = user.getUid();
+        } else {
+            SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+            uid = prefs.getString("user_uid", "anonimo");
+        }
+
+        // Crear mapa de datos
+        Map<String, Object> habito = new HashMap<>();
+        habito.put("usuario_id", uid);
+        habito.put("descripcion", textoHabito);
+        habito.put("tipo", "saludable");
+        habito.put("fecha", new Date());
+
+        // Guardar en Firestore
+        db.collection("habitos")
+                .add(habito)
+                .addOnSuccessListener(documentReference -> {
+                    Toast.makeText(this, "¡Hábito saludable guardado!", Toast.LENGTH_SHORT).show();
+                    etHabito.setText("");
+                    btnEnviarHabito.setEnabled(true);
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Error al guardar: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    btnEnviarHabito.setEnabled(true);
+                });
     }
 
     private void configurarNavegacion() {
