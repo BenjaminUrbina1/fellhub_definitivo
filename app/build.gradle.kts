@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.services) // <--- Esto activa lo que definiste en el TOML
 }
 
 android {
@@ -36,7 +37,9 @@ android {
 }
 
 dependencies {
-
+    implementation(platform(libs.firebase.bom)) // <--- Importante para que funcione el BOM
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
