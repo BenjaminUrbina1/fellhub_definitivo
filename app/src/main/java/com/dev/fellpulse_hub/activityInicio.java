@@ -16,6 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class activityInicio extends AppCompatActivity {
 
@@ -28,6 +29,12 @@ public class activityInicio extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
+
+        // --- ACTUALIZACIÓN DE BASE DE DATOS ---
+        // Esto cargará la configuración de la Rueda de Emociones en Firebase
+        // la primera vez que se ejecute.
+        InicializadorDatos.cargarConfiguracionInicial();
+        // --------------------------------------
 
         inicializarVistas();
         configurarMenuHamburguesa();
@@ -177,6 +184,7 @@ public class activityInicio extends AppCompatActivity {
                 .setTitle("Cerrar Sesión")
                 .setMessage("¿Seguro que deseas salir?")
                 .setPositiveButton("Sí", (dialog, which) -> {
+                    FirebaseAuth.getInstance().signOut();
                     SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.clear();
