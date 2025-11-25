@@ -5,13 +5,13 @@ plugins {
 
 android {
     namespace = "com.dev.fellpulse_hub"
-    compileSdk = 36
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.dev.fellpulse_hub"
         // Se sube la versión mínima para soportar iconos adaptativos y funciones modernas
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
