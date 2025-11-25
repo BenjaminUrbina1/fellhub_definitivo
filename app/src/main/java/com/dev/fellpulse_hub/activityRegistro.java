@@ -82,7 +82,8 @@ public class activityRegistro extends AppCompatActivity {
                         // Usuario creado en Auth
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (user != null) {
-                            guardarDatosFirestore(user.getUid(), email, nombre, apellido);
+                            // PASO CLAVE: Pasamos también la contraseña para guardarla
+                            guardarDatosFirestore(user.getUid(), email, nombre, apellido, password);
                         }
                     } else {
                         Toast.makeText(activityRegistro.this, "Fallo en registro: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
@@ -90,12 +91,15 @@ public class activityRegistro extends AppCompatActivity {
                 });
     }
 
-    private void guardarDatosFirestore(String uid, String email, String nombre, String apellido) {
+    private void guardarDatosFirestore(String uid, String email, String nombre, String apellido, String password) {
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("uid", uid);
         userMap.put("nombre", nombre);
         userMap.put("apellido", apellido);
         userMap.put("email", email);
+        // ADVERTENCIA: Guardar contraseñas en texto plano no es recomendado por seguridad.
+        // Se hace aquí bajo petición explícita del usuario.
+        userMap.put("password", password); 
         userMap.put("fecha_registro", com.google.firebase.Timestamp.now());
 
         db.collection("users").document(uid)

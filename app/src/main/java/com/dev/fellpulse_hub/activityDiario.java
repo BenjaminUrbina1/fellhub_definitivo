@@ -57,12 +57,14 @@ public class activityDiario extends AppCompatActivity {
         // Listener para el botón "Escribir" Matutino
         btnWriteMorning.setOnClickListener(v -> {
             Intent intent = new Intent(activityDiario.this, activityEscribirDiario.class);
+            intent.putExtra("momento_dia", "Matutino");
             startActivity(intent);
         });
 
         // Listener para el botón "Escribir" Nocturno
         btnWriteNight.setOnClickListener(v -> {
             Intent intent = new Intent(activityDiario.this, activityEscribirDiario.class);
+            intent.putExtra("momento_dia", "Nocturno");
             startActivity(intent);
         });
 

@@ -1,6 +1,7 @@
 package com.dev.fellpulse_hub;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -12,6 +13,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class activityCreadores extends AppCompatActivity {
 
@@ -20,10 +28,18 @@ public class activityCreadores extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private FrameLayout btnHeart;
 
+    // Firebase
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creadores);
+
+        // Inicializar Firebase
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         // Inicializar vistas
         etContactMessage = findViewById(R.id.etContactMessage);
@@ -42,8 +58,7 @@ public class activityCreadores extends AppCompatActivity {
         btnSendMessage.setOnClickListener(v -> {
             String message = etContactMessage.getText().toString().trim();
             if (!message.isEmpty()) {
-                Toast.makeText(this, "¡Gracias por tu mensaje! Lo revisaremos pronto.", Toast.LENGTH_LONG).show();
-                etContactMessage.setText("");
+                enviarMensajeAFirebase(message);
             } else {
                 Toast.makeText(this, "Por favor, escribe un mensaje antes de enviar.", Toast.LENGTH_SHORT).show();
             }
@@ -54,6 +69,41 @@ public class activityCreadores extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         });
+    }
+
+    private void enviarMensajeAFirebase(String mensaje) {
+        btnSendMessage.setEnabled(false); // Evitar doble clic
+
+        // Obtener UID del usuario
+        FirebaseUser user = mAuth.getCurrentUser();
+        String uid;
+        if (user != null) {
+            uid = user.getUid();
+        } else {
+            SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+            uid = prefs.getString("user_uid", "anonimo");
+        }
+
+        // Crear el objeto de datos
+        Map<String, Object> feedback = new HashMap<>();
+        feedback.put("usuario_id", uid);
+        feedback.put("mensaje", mensaje);
+        feedback.put("tipo", "Contacto Creadores"); // Etiqueta para identificarlo
+        feedback.put("fecha", new Date());
+        feedback.put("estado", "Pendiente"); // Para que tú sepas si ya lo leíste
+
+        // Guardar en la colección "retroalimentacion"
+        db.collection("retroalimentacion")
+                .add(feedback)
+                .addOnSuccessListener(documentReference -> {
+                    Toast.makeText(this, "¡Mensaje enviado! Gracias por contactarnos.", Toast.LENGTH_LONG).show();
+                    etContactMessage.setText("");
+                    btnSendMessage.setEnabled(true);
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Error al enviar: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    btnSendMessage.setEnabled(true);
+                });
     }
 
     private void configurarBottomNavigation() {

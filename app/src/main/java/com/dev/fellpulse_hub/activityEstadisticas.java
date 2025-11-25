@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -20,10 +19,16 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButtonToggleGroup;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Random;
+import java.util.Map;
 
 public class activityEstadisticas extends AppCompatActivity {
 
@@ -34,16 +39,26 @@ public class activityEstadisticas extends AppCompatActivity {
     private TextView tvHeartRatePercentage, tvOxygenSaturationPercentage, tvStatsTitle, tvMoodMessage;
     private ImageView ivMoodIcon;
 
+    // Firebase
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_estadisticas);
 
+        // Inicializar Firebase
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+
         inicializarVistas();
         configurarNavegacion();
         configurarFiltros();
         configurarGrafico();
-        cargarDatos("Semanales");
+        
+        // Cargar datos por defecto (Semanales)
+        cargarDatosDeFirebase("Semanales");
 
         Animation heartBeatAnimation = AnimationUtils.loadAnimation(this, R.anim.heart_beat);
         btnHeart.startAnimation(heartBeatAnimation);
@@ -76,7 +91,7 @@ public class activityEstadisticas extends AppCompatActivity {
             } else if (id == R.id.nav_creators) {
                 startActivity(new Intent(this, activityCreadores.class));
             } else if (id == R.id.nav_statistics) {
-                return true; // Ya estamos aquí
+                return true; 
             } else if (id == R.id.nav_daily_aura) {
                 startActivity(new Intent(this, activityDiario.class));
             }
@@ -89,13 +104,13 @@ public class activityEstadisticas extends AppCompatActivity {
             if (isChecked) {
                 if (checkedId == R.id.btnWeekly) {
                     tvStatsTitle.setText("Estadísticas Semanales");
-                    cargarDatos("Semanales");
+                    cargarDatosDeFirebase("Semanales");
                 } else if (checkedId == R.id.btnMonthly) {
                     tvStatsTitle.setText("Estadísticas Mensuales");
-                    cargarDatos("Mensuales");
+                    cargarDatosDeFirebase("Mensuales");
                 } else if (checkedId == R.id.btnYearly) {
                     tvStatsTitle.setText("Estadísticas Anuales");
-                    cargarDatos("Anuales");
+                    cargarDatosDeFirebase("Anuales");
                 }
             }
         });
@@ -103,68 +118,118 @@ public class activityEstadisticas extends AppCompatActivity {
 
     private void configurarGrafico() {
         lineChart.getDescription().setEnabled(false);
-        lineChart.setNoDataText("Cargando datos...");
+        lineChart.setNoDataText("No hay registros disponibles aún.");
         lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         lineChart.getAxisRight().setEnabled(false);
         lineChart.getLegend().setEnabled(true);
     }
 
-    private void cargarDatos(String periodo) {
-        int cantidadDatos;
-        if (periodo.equals("Semanales")) {
-            cantidadDatos = 7;
-        } else if (periodo.equals("Mensuales")) {
-            cantidadDatos = 30;
-        } else { // Anuales
-            cantidadDatos = 12;
+    private void cargarDatosDeFirebase(String periodo) {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user == null) {
+            lineChart.setNoDataText("Inicia sesión para ver tus estadísticas.");
+            lineChart.invalidate();
+            return;
         }
 
-        List<Entry> entriesHeartRate = new ArrayList<>();
-        List<Entry> entriesOxygen = new ArrayList<>();
-        Random random = new Random();
+        int limite = 7;
+        if (periodo.equals("Mensuales")) limite = 30;
+        if (periodo.equals("Anuales")) limite = 365; // O las últimas 365 mediciones
 
-        float totalHeartRate = 0;
-        float totalOxygen = 0;
+        // Consulta a la colección "historial_emociones"
+        // Ordenamos por fecha descendente para obtener los ÚLTIMOS registros
+        db.collection("historial_emociones")
+                .whereEqualTo("usuario_id", user.getUid())
+                .orderBy("fecha", Query.Direction.DESCENDING)
+                .limit(limite)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<Entry> entriesHeartRate = new ArrayList<>();
+                    List<Entry> entriesOxygen = new ArrayList<>();
+                    
+                    if (queryDocumentSnapshots.isEmpty()) {
+                        lineChart.clear();
+                        lineChart.setNoDataText("Sin datos del sensor aún.");
+                        tvHeartRatePercentage.setText("--");
+                        tvOxygenSaturationPercentage.setText("--");
+                        return;
+                    }
 
-        for (int i = 0; i < cantidadDatos; i++) {
-            float heartRate = 60 + random.nextFloat() * 40; // Rango 60-100
-            float oxygen = 95 + random.nextFloat() * 5;     // Rango 95-100
-            entriesHeartRate.add(new Entry(i, heartRate));
-            entriesOxygen.add(new Entry(i, oxygen));
-            totalHeartRate += heartRate;
-            totalOxygen += oxygen;
-        }
+                    // Recorremos los documentos
+                    // Nota: Vienen del más nuevo al más viejo. Para el gráfico queremos cronológico (viejo -> nuevo)
+                    List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
+                    Collections.reverse(docs); // Invertimos la lista
 
-        float avgHeartRate = totalHeartRate / cantidadDatos;
-        float avgOxygen = totalOxygen / cantidadDatos;
+                    float totalHeartRate = 0;
+                    float totalOxygen = 0;
+                    int count = 0;
 
-        tvHeartRatePercentage.setText(String.format("%.1f %%", avgHeartRate));
-        tvOxygenSaturationPercentage.setText(String.format("%.1f %%", avgOxygen));
+                    for (int i = 0; i < docs.size(); i++) {
+                        DocumentSnapshot doc = docs.get(i);
+                        
+                        // Extraer datos anidados del mapa "biometria"
+                        Map<String, Object> biometria = (Map<String, Object>) doc.get("biometria");
+                        
+                        if (biometria != null) {
+                            // Convertir a float de forma segura
+                            Object bpmObj = biometria.get("bpm");
+                            Object spo2Obj = biometria.get("spo2");
 
-        actualizarMensajeAnimo(avgHeartRate, avgOxygen);
+                            if (bpmObj != null && spo2Obj != null) {
+                                float heartRate = Float.parseFloat(bpmObj.toString());
+                                float oxygen = Float.parseFloat(spo2Obj.toString());
 
-        LineDataSet dataSetHeartRate = new LineDataSet(entriesHeartRate, "Frec. Cardíaca");
+                                entriesHeartRate.add(new Entry(i, heartRate));
+                                entriesOxygen.add(new Entry(i, oxygen));
+
+                                totalHeartRate += heartRate;
+                                totalOxygen += oxygen;
+                                count++;
+                            }
+                        }
+                    }
+
+                    if (count > 0) {
+                        actualizarGrafico(entriesHeartRate, entriesOxygen);
+                        actualizarPromedios(totalHeartRate / count, totalOxygen / count);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Error cargando estadísticas: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void actualizarGrafico(List<Entry> heartRateData, List<Entry> oxygenData) {
+        LineDataSet dataSetHeartRate = new LineDataSet(heartRateData, "Frec. Cardíaca (BPM)");
         dataSetHeartRate.setColor(Color.RED);
         dataSetHeartRate.setCircleColor(Color.RED);
+        dataSetHeartRate.setLineWidth(2f);
+        dataSetHeartRate.setCircleRadius(3f);
 
-        LineDataSet dataSetOxygen = new LineDataSet(entriesOxygen, "Sat. Oxígeno");
+        LineDataSet dataSetOxygen = new LineDataSet(oxygenData, "Sat. Oxígeno (%)");
         dataSetOxygen.setColor(Color.BLUE);
         dataSetOxygen.setCircleColor(Color.BLUE);
+        dataSetOxygen.setLineWidth(2f);
+        dataSetOxygen.setCircleRadius(3f);
 
         LineData lineData = new LineData(dataSetHeartRate, dataSetOxygen);
         lineChart.setData(lineData);
-        lineChart.invalidate(); // Refrescar gráfico
+        lineChart.invalidate(); // Refrescar
+        lineChart.animateX(1000);
     }
 
-    private void actualizarMensajeAnimo(float avgHeartRate, float avgOxygen) {
-        if (avgHeartRate > 90 || avgHeartRate < 70) {
-            tvMoodMessage.setText("Tus niveles de estrés parecen altos. ¡Tómate un descanso!");
+    private void actualizarPromedios(float avgHeartRate, float avgOxygen) {
+        tvHeartRatePercentage.setText(String.format("%.0f BPM", avgHeartRate));
+        tvOxygenSaturationPercentage.setText(String.format("%.0f %%", avgOxygen));
+
+        if (avgHeartRate > 100 || avgHeartRate < 60) {
+            tvMoodMessage.setText("Tu ritmo cardíaco ha estado inusual. ¿Todo bien?");
             ivMoodIcon.setImageResource(R.drawable.malos);
-        } else if (avgOxygen < 96) {
-            tvMoodMessage.setText("Tu oxígeno es un poco bajo. Asegúrate de estar en un lugar ventilado.");
+        } else if (avgOxygen < 95) {
+            tvMoodMessage.setText("Niveles de oxígeno un poco bajos.");
             ivMoodIcon.setImageResource(R.drawable.malos);
         } else {
-            tvMoodMessage.setText("¡Tus estadísticas se ven geniales! Sigue así.");
+            tvMoodMessage.setText("¡Tus estadísticas están estables!");
             ivMoodIcon.setImageResource(R.drawable.buenos);
         }
     }
