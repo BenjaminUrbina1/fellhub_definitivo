@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondoinicial"
+    tools:context=".activityHabitosNoSaludables">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_marginBottom="56dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Título -->
+            <TextView
+                android:id="@+id/tvTituloNoSaludable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/titulo_habitos_no_saludables"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:textColor="#4B3F72"
+                android:gravity="center"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- Contenedor de Hábitos -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/habits_container_background"
+                android:padding="16dp">
+
+                <!-- Hábito 1 -->
+                <com.google.android.material.card.MaterialCardView style="@style/HabitCardView">
+                    <LinearLayout style="@style/HabitCardContent">
+                        <ImageView style="@style/HabitIcon"
+                            android:src="@drawable/ic_aura"/>
+                        <TextView style="@style/HabitText"
+                            android:text="1. Evita compararte constantemente con los demás." />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Hábito 2 -->
+                <com.google.android.material.card.MaterialCardView style="@style/HabitCardView">
+                    <LinearLayout style="@style/HabitCardContent">
+                        <ImageView style="@style/HabitIcon"
+                            android:src="@drawable/ic_aura"/>
+                        <TextView style="@style/HabitText"
+                            android:text="2. No te quedes atrapado en pensamientos negativos recurrentes." />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Hábito 3 -->
+                <com.google.android.material.card.MaterialCardView style="@style/HabitCardView">
+                    <LinearLayout style="@style/HabitCardContent">
+                        <ImageView style="@style/HabitIcon"
+                            android:src="@drawable/ic_aura"/>
+                        <TextView style="@style/HabitText"
+                            android:text="3. No te aísles. Mantén el contacto con amigos y familiares." />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Hábito 4 -->
+                <com.google.android.material.card.MaterialCardView style="@style/HabitCardView"
+                    android:layout_marginBottom="0dp">
+                    <LinearLayout style="@style/HabitCardContent">
+                        <ImageView style="@style/HabitIcon"
+                            android:src="@drawable/ic_aura"/>
+                        <TextView style="@style/HabitText"
+                            android:text="4. No busques la perfección en todo. Acepta los errores como parte del aprendizaje." />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+            <!-- Sección para compartir -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="¿Conoces otro mal hábito? ¡Compártelo para ayudar a otros!"
+                android:textSize="16sp"
+                android:textColor="#4B3F72"
+                android:gravity="center"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"/>
+
+            <EditText
+                android:id="@+id/etHabitoNoSaludable"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:hint="Escribe el hábito aquí..."
+                android:inputType="textMultiLine"
+                android:gravity="top"
+                android:padding="12dp"
+                android:background="@drawable/edittext_borde"
+                android:layout_marginBottom="16dp"/>
+
+            <Button
+                android:id="@+id/btnEnviarHabitoNoSaludable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Enviar"
+                android:backgroundTint="#7B1FA2"
+                android:textColor="#FFFFFF"/>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Barra de navegación inferior -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:menu="@menu/bottom_menu"
+        app:backgroundTint="#F7F4FF" />
+
+    <!-- Botón del Corazón con texto "Inicio" -->
+    <FrameLayout
+        android:id="@+id/btnHeart"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:contentDescription="Volver a Inicio"
+        android:elevation="8dp"
+        app:layout_anchor="@id/bottomNavigationView"
+        app:layout_anchorGravity="top|center">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/corazon_shape"
+            android:scaleType="centerInside" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inicio"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:layout_gravity="center"
+            android:elevation="1dp"/>
+    </FrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondoinicial"
+    tools:context=".activityBienvenida">
+
+    <!-- Contenedor blanco central -->
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:elevation="8dp"
+        android:gravity="center_horizontal">
+
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/logoFellpulseHub"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/logo" 
+            android:contentDescription="@string/app_name" />
+
+        <!-- Título -->
+        <TextView
+            android:id="@+id/tituloFellpulseHub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bienvenida_titulo"
+            android:textColor="#4B3E6D"
+            android:textSize="35sp"
+            android:textStyle="bold"
+            android:layout_marginTop="30dp"
+            android:textAlignment="center"/>
+
+        <!-- Subtitulo -->
+        <TextView
+            android:id="@+id/subtituloFellpulseHub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bienvenida_subtitulo"
+            android:textColor="#5A4B7F"
+            android:textSize="19sp"
+            android:layout_marginTop="5dp"
+            android:paddingHorizontal="10dp"
+            android:textAlignment="center"/>
+
+        <!-- Botón Empezar -->
+        <Button
+            android:id="@+id/btnEmpezar"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="@string/bienvenida_boton_empezar"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:layout_marginTop="30dp"
+            android:paddingVertical="10dp"
+            android:background="@drawable/botonredondeado"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

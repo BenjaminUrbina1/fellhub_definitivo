@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_user_profile"
+        android:icon="@drawable/ic_usuario"
+        android:title="Perfil" />
+
+    <item
+        android:id="@+id/nav_creators"
+        android:icon="@drawable/ic_creadores"
+        android:title="Creadores" />
+
+    <item
+        android:id="@+id/nav_statistics"
+        android:icon="@drawable/ic_estaditicas"
+        android:title="Estadísticas" />
+
+    <item
+        android:id="@+id/nav_daily_aura"
+        android:icon="@drawable/ic_aura"
+        android:title="Aura Diario" />
+
+</menu>

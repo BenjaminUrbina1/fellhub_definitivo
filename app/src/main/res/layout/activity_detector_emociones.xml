@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondoinicial"
+    tools:context=".activityDetectorEmociones">
+
+    <!-- Contenido Principal Desplazable -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_marginBottom="56dp"> 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- 1. Calendario -->
+            <CalendarView
+                android:id="@+id/emotionCalendarView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F5D0D6" />
+
+            <!-- 2. Tarjeta de Notas -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/notesCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Notas para tu día"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="#4B3F72"
+                        android:layout_marginBottom="8dp"/>
+
+                    <LinearLayout
+                        android:id="@+id/containerTips"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView android:id="@+id/tip1" style="@style/TipTextViewStyle" />
+                        <TextView android:id="@+id/tip2" style="@style/TipTextViewStyle" />
+                        <TextView android:id="@+id/tip3" style="@style/TipTextViewStyle" />
+                        <TextView android:id="@+id/tip4" style="@style/TipTextViewStyle" />
+                        <TextView android:id="@+id/tip5" style="@style/TipTextViewStyle" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Barra de navegación inferior -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:menu="@menu/bottom_menu"
+        app:backgroundTint="#F7F4FF" />
+
+    <!-- Botón del Corazón con texto "Inicio" -->
+    <FrameLayout
+        android:id="@+id/btnHeart"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:contentDescription="Volver a Inicio"
+        android:elevation="8dp"
+        app:layout_anchor="@id/bottomNavigationView"
+        app:layout_anchorGravity="top|center">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/corazon_shape"
+            android:scaleType="centerInside" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inicio"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:layout_gravity="center"
+            android:elevation="1dp"/>
+
+    </FrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

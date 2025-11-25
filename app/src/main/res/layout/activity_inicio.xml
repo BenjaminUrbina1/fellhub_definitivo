@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondoinicial"
+    tools:context=".activityInicio">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="102dp"
+        android:background="#F7F4FF"
+        app:title="Fellpulse Hub"
+        app:titleTextColor="#4B3F72">
+
+        <ImageButton
+            android:id="@+id/btnMenuHamburguesa"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Menú"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icono" />
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="110dp" 
+        android:layout_marginBottom="60dp"> 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/detector"
+                style="@style/InicioBloquePrincipal"
+                android:background="@drawable/card_gradient_background">
+                <ImageView style="@style/InicioIcono" 
+                    android:src="@drawable/detector"/>
+                <TextView style="@style/InicioTexto" 
+                    android:text="Detector de Emociones"/>
+            </LinearLayout>
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:columnCount="2"
+                android:alignmentMode="alignMargins"
+                android:rowOrderPreserved="false">
+                
+                <LinearLayout
+                    android:id="@+id/BuenosHabitos"
+                    android:layout_width="0dp"
+                    android:layout_height="160dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/card_gradient_background"
+                    android:clickable="true"
+                    android:elevation="4dp"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <ImageView style="@style/InicioIconoCard"
+                        android:src="@drawable/buenos"/>
+                    <TextView style="@style/InicioTextoCard"
+                        android:text="Hábitos Saludables"/>
+                </LinearLayout>
+                
+                <LinearLayout
+                    android:id="@+id/MalosHabitos"
+                    android:layout_width="0dp"
+                    android:layout_height="160dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/card_gradient_background"
+                    android:clickable="true"
+                    android:elevation="4dp"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <ImageView style="@style/InicioIconoCard"
+                        android:src="@drawable/malos"/>
+                    <TextView style="@style/InicioTextoCard"
+                        android:text="Hábitos No Saludables" android:gravity="center"/>
+                </LinearLayout>
+
+            </GridLayout>
+
+            <LinearLayout
+                android:id="@+id/Comunidad"
+                style="@style/InicioBloquePrincipal"
+                android:background="@drawable/card_gradient_background">
+                <ImageView style="@style/InicioIcono"
+                    android:src="@drawable/comunidad"/>
+                <TextView style="@style/InicioTexto"
+                    android:text="Pulso Colectivo"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:menu="@menu/bottom_menu"
+        app:backgroundTint="#F7F4FF" />
+
+    <!-- Botón del Corazón con texto "Inicio" -->
+    <FrameLayout
+        android:id="@+id/btnHeart"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:contentDescription="Volver a Inicio"
+        android:elevation="8dp"
+        app:layout_anchor="@id/bottomNavigationView"
+        app:layout_anchorGravity="top|center">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/corazon_shape"
+            android:scaleType="centerInside" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inicio"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:layout_gravity="center"
+            android:elevation="1dp"/>
+
+    </FrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

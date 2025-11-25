@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@drawable/fondoinicial"
+tools:context=".activityComunidad">
+
+<!-- Lista de publicaciones del foro, con espacio inferior para la barra -->
+<androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/rvPosts"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:paddingTop="8dp"
+    android:paddingBottom="80dp"
+    tools:listitem="@layout/item_post" />
+
+<!-- Botón para crear un nuevo post, elevado sobre la barra de nav -->
+<com.google.android.material.floatingactionbutton.FloatingActionButton
+    android:id="@+id/fabCreatePost"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|end"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="80dp"
+    android:src="@android:drawable/ic_input_add"
+    app:backgroundTint="#7B1FA2"
+    app:tint="@android:color/white"
+    android:contentDescription="Crear nueva publicación" />
+
+<!-- Barra de navegación inferior -->
+<com.google.android.material.bottomnavigation.BottomNavigationView
+    android:id="@+id/bottomNavigationView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    app:menu="@menu/bottom_menu"
+    app:backgroundTint="#F7F4FF" />
+
+<!-- Botón del Corazón con texto "Inicio" -->
+<FrameLayout
+    android:id="@+id/btnHeart"
+    android:layout_width="80dp"
+    android:layout_height="80dp"
+    android:contentDescription="Volver a Inicio"
+    android:elevation="8dp"
+    app:layout_anchor="@id/bottomNavigationView"
+    app:layout_anchorGravity="top|center">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/corazon_shape"
+        android:scaleType="centerInside" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Inicio"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:layout_gravity="center"
+        android:elevation="1dp"/>
+</FrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

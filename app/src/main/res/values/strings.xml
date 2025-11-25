@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fellpulse Hub</string>
+    <string name="login_register_link">¿No tienes cuenta? <b><u>Regístrate aquí</u></b> 💓</string>
+    <string name="register_login_link">¿Ya tienes una cuenta? <b><u>Inicia Sesión</u></b> 💓</string>
+
+    <!-- Títulos de las pantallas de hábitos con subrayado -->
+    <string name="titulo_habitos_saludables"><u>¡4 Hábitos para Mejorar tu Salud Mental!</u></string>
+    <string name="titulo_habitos_no_saludables"><u>Hábitos a Evitar para Cuidar tu Mente</u></string>
+
+    <!-- Textos de la pantalla de Bienvenida -->
+    <string name="bienvenida_titulo">Bienvenido a Fellpulse Hub</string>
+    <string name="bienvenida_subtitulo">Tu bienestar comienza con un solo pulso💓</string>
+    <string name="bienvenida_boton_empezar">Empezar</string>
+</resources>

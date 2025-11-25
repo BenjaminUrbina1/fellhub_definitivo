@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ESTADO CUANDO EL EDITTEXT ESTÁ ENFOCADO (SELECCIONADO) -->
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <!-- Fondo del EditText cuando está seleccionado -->
+            <solid android:color="#FFFFFF"/>
+
+            <!-- Borde del EditText cuando está seleccionado -->
+            <stroke
+                android:width="2dp"
+                android:color="#C6A8FF"/>
+
+            <!-- Bordes redondeados -->
+            <corners android:radius="12dp"/>
+        </shape>
+    </item>
+
+    <!-- ESTADO POR DEFECTO (NORMAL) -->
+    <item>
+        <shape android:shape="rectangle">
+            <!-- Fondo del EditText en estado normal -->
+            <solid android:color="#F8F5FF"/>
+
+            <!-- Borde del EditText en estado normal -->
+            <stroke
+                android:width="1dp"
+                android:color="#D1C4E9"/> <!-- Usé un color un poco más suave para el estado normal -->
+
+            <!-- Bordes redondeados -->
+            <corners android:radius="12dp"/>
+        </shape>
+    </item>
+
+</selector>

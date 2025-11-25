@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/logo"
+        android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+
+        <!-- Actividad de inicio de la aplicación -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="sensor">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <!-- Actividades de la aplicación -->
+        <activity android:name=".activityBienvenida" android:screenOrientation="sensor"/>
+        <activity android:name=".activityLogin" android:screenOrientation="sensor"/>
+        <activity android:name=".activityRegistro" android:screenOrientation="sensor"/>
+        <activity android:name=".activityInicio" android:screenOrientation="sensor"/>
+        <activity android:name=".activityDetectorEmociones" android:screenOrientation="sensor"/>
+        <activity android:name=".activityHabitosSaludables" android:screenOrientation="sensor"/>
+        <activity android:name=".activityHabitosNoSaludables" android:screenOrientation="sensor"/>
+        <activity android:name=".activityComunidad" android:screenOrientation="sensor"/>
+        <activity android:name=".activityCreatePost" android:screenOrientation="sensor"/>
+        <activity android:name=".activityCuenta" android:screenOrientation="sensor"/>
+        <activity android:name=".activityCreadores" android:screenOrientation="sensor"/>
+        <activity android:name=".activityEstadisticas" android:screenOrientation="sensor"/>
+        <activity android:name=".activityDiario" android:screenOrientation="sensor"/>
+        <activity android:name=".activityEscribirDiario" android:screenOrientation="sensor"/>
+
+    </application>
+
+</manifest>
