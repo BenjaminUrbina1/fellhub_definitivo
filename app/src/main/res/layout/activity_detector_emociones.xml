@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:background="#F5D0D6" />
 
-            <!-- 2. Tarjeta de Notas -->
+            <!-- 2. Tarjeta de Notas y Detector -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/notesCard"
                 android:layout_width="match_parent"
@@ -45,17 +45,48 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Notas para tu día"
+                        android:text="Detector de Emociones"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="#4B3F72"
                         android:layout_marginBottom="8dp"/>
 
+                    <!-- BOTÓN PARA ACTIVAR ARDUINO -->
+                    <Button
+                        android:id="@+id/btnDetectar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Conectar Sensor"
+                        android:backgroundTint="#673AB7"
+                        android:textColor="@android:color/white"
+                        android:layout_marginBottom="8dp"/>
+
+                    <!-- RESULTADO DEL SENSOR -->
+                    <TextView
+                        android:id="@+id/tvEstadoSensor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Presiona para iniciar lectura..."
+                        android:textAlignment="center"
+                        android:textSize="16sp"
+                        android:textColor="#757575"
+                        android:layout_marginBottom="16dp"/>
+
+                    <!-- CONTENEDOR DE TIPS (Inicialmente Oculto) -->
                     <LinearLayout
                         android:id="@+id/containerTips"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone" 
+                        tools:visibility="visible">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Notas para tu día:"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="4dp"/>
 
                         <TextView android:id="@+id/tip1" style="@style/TipTextViewStyle" />
                         <TextView android:id="@+id/tip2" style="@style/TipTextViewStyle" />

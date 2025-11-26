@@ -134,12 +134,10 @@ public class activityEstadisticas extends AppCompatActivity {
 
         int limite = 7;
         if (periodo.equals("Mensuales")) limite = 30;
-        if (periodo.equals("Anuales")) limite = 365; // O las últimas 365 mediciones
+        if (periodo.equals("Anuales")) limite = 365;
 
-        // Consulta a la colección "historial_emociones"
-        // Ordenamos por fecha descendente para obtener los ÚLTIMOS registros
-        db.collection("historial_emociones")
-                .whereEqualTo("usuario_id", user.getUid())
+        // RUTA ACTUALIZADA: users/{uid}/historial_emociones
+        db.collection("users").document(user.getUid()).collection("historial_emociones")
                 .orderBy("fecha", Query.Direction.DESCENDING)
                 .limit(limite)
                 .get()
@@ -155,10 +153,8 @@ public class activityEstadisticas extends AppCompatActivity {
                         return;
                     }
 
-                    // Recorremos los documentos
-                    // Nota: Vienen del más nuevo al más viejo. Para el gráfico queremos cronológico (viejo -> nuevo)
                     List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
-                    Collections.reverse(docs); // Invertimos la lista
+                    Collections.reverse(docs); // Invertir para orden cronológico
 
                     float totalHeartRate = 0;
                     float totalOxygen = 0;
@@ -166,12 +162,9 @@ public class activityEstadisticas extends AppCompatActivity {
 
                     for (int i = 0; i < docs.size(); i++) {
                         DocumentSnapshot doc = docs.get(i);
-                        
-                        // Extraer datos anidados del mapa "biometria"
                         Map<String, Object> biometria = (Map<String, Object>) doc.get("biometria");
                         
                         if (biometria != null) {
-                            // Convertir a float de forma segura
                             Object bpmObj = biometria.get("bpm");
                             Object spo2Obj = biometria.get("spo2");
 
